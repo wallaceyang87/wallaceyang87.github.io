@@ -86,7 +86,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="Java," />
 
 
 
@@ -108,7 +108,7 @@
 <meta property="og:url" content="http://yoursite.com/2016/11/28/Java运行时汇编代码输出/index.html">
 <meta property="og:site_name" content="上善若水 厚德载物">
 <meta property="og:description" content="看一些书中的示例代码，讲一些原理性的东西时，总是将Java代码转换为汇编代码来讲原理，出于好奇，也想将自己的代码转换过来看看，可惜事情总不是想想的那么简单，比如我想看一下Java中如何将volatile关键字转换后的lock头究竟是个什么样子的，折腾了半天，终于见到它的庐山真面目。首先，我们需要HSDIS插件，jvm不提供将字节码输出成汇编代码的功能，所以我们要借助HSDIS插件来（Kenai（h">
-<meta property="og:updated_time" content="2016-11-28T06:25:40.000Z">
+<meta property="og:updated_time" content="2016-11-28T07:21:31.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java运行时汇编代码输出">
 <meta name="twitter:description" content="看一些书中的示例代码，讲一些原理性的东西时，总是将Java代码转换为汇编代码来讲原理，出于好奇，也想将自己的代码转换过来看看，可惜事情总不是想想的那么简单，比如我想看一下Java中如何将volatile关键字转换后的lock头究竟是个什么样子的，折腾了半天，终于见到它的庐山真面目。首先，我们需要HSDIS插件，jvm不提供将字节码输出成汇编代码的功能，所以我们要借助HSDIS插件来（Kenai（h">
@@ -204,6 +204,16 @@
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
             首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
           </a>
         </li>
       
@@ -304,8 +314,33 @@
           </span>
 
           
+            <span class="post-category" >
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/并发编程/" itemprop="url" rel="index">
+                    <span itemprop="name">并发编程</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
 
           
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <a href="/2016/11/28/Java运行时汇编代码输出/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/11/28/Java运行时汇编代码输出/" itemprop="commentCount"></span>
+                </a>
+              </span>
             
           
 
@@ -354,12 +389,34 @@
     <div>
       
         
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+      
+        <div id="alipay" style="display: inline-block">
+          <img id="alipay_qr" src="/path/to/alipay-reward-image" alt="骑二八赶驴 Alipay"/>
+          <p>支付宝打赏</p>
+        </div>
+      
+    </div>
+  </div>
+
 
       
     </div>
 
 
     <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java/" rel="tag"># Java</a>
+          
+        </div>
       
 
       
@@ -400,6 +457,10 @@
           
   <div class="comments" id="comments">
     
+      <div class="ds-thread" data-thread-key="2016/11/28/Java运行时汇编代码输出/"
+           data-title="Java运行时汇编代码输出" data-url="http://yoursite.com/2016/11/28/Java运行时汇编代码输出/">
+      </div>
+    
   </div>
 
 
@@ -438,6 +499,13 @@
             </a>
           </div>
 
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
           
 
           
@@ -598,14 +666,33 @@
 
   
 
+  
+    
+  
 
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"wallaceyang"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
 
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
   
 
 
 
 
-	
 
 
 
