@@ -118,7 +118,7 @@ commit 方式构建镜像文件docker commit方式构建镜像文件不够灵活
 通过docker build以及Dockerfile构建
 
 commit 方式构建镜像文件docker commit方式构建镜像文件不够灵活，复用性不高，不建议使用，不再赘述实现细节，原理就是生成一个基础镜像（Ubuntu或者CentOS）之后拉起镜像文件，进入容器，在容器内一层一层拉去你需要的组件，比如jdk，to">
-<meta property="og:updated_time" content="2016-12-02T15:33:55.000Z">
+<meta property="og:updated_time" content="2016-12-02T15:55:22.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Docker构建镜像文件">
 <meta name="twitter:description" content="Docker可以通过两种方式构建镜像文件：
@@ -447,10 +447,17 @@ commit 方式构建镜像文件docker commit方式构建镜像文件不够灵活
 <p>如果<code>&lt;dest&gt;</code>以/结尾，则认为源位置指向的是一个目录，如果不以/结尾，则认为源位置是一个普通文件</p>
 </blockquote>
 <p><span id="COPY">COPY</span><br>与ADD相似，不能解压，不支持URL</p>
-<p><span id="ENTRYPOINT">ENTRYPOINT</span></p>
-<p><span id="VOLUME">VOLUME</span></p>
-<p><span id="USER">USER</span></p>
-<p><span id="WORKDIR">WORKDIR</span></p>
+<p><span id="ENTRYPOINT">ENTRYPOINT</span><br>ENTRYPOINT命令和CMD命令很像，只是CMD命令会在拉起容器时命令指定的指令覆盖掉，但是ENTRYPOINT不会被覆盖，docker run 命令行执行时指定的任何参数都会被当做参数传递给ENTRYPOINT指令中的命令。</p>
+<p><span id="VOLUME">VOLUME</span><br>VOLUME指令指定容器的挂载点，在docker run命令行中加入-v，将宿主机目录挂载到容器的VOLUME指令指定的目录，实现容器与宿主机间的文件处理。<br>使用</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">VOLUME</span><span class="bash"> [<span class="string">"/data"</span>,<span class="string">"/log"</span>]</span></div></pre></td></tr></table></figure>
+<p>Dockerfile中指令</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">VOLUME</span><span class="bash"> /logs/app</span></div></pre></td></tr></table></figure>
+<p>启动容器时</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">➜  ~ docker run -v <span class="regexp">/logs/</span><span class="string">river:</span><span class="regexp">/logs/</span>app ....</div></pre></td></tr></table></figure>
+<p><span id="USER">USER</span><br>USER指令用于指定运行容器的用户名以及执行Dockerfile中指令的用户</p>
+<figure class="highlight crmsh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">USER</span> <span class="title">user</span></div><div class="line"><span class="keyword">USER</span> <span class="title">user</span>:<span class="keyword">group</span></div><div class="line"><span class="title">USER</span> uid:gid</div><div class="line"><span class="keyword">USER</span> <span class="title">user</span>:gid</div><div class="line"><span class="keyword">USER</span> <span class="title">uid</span>:group</div></pre></td></tr></table></figure>
+<p><span id="WORKDIR">WORKDIR</span><br>WORKDIR用于指定当前工作目录，便于后面的COPY,ADD,RUN等指令的执行</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">ENV</span> DIRPATH /path</div><div class="line"><span class="keyword">WORKDIR</span><span class="bash"> <span class="variable">$DIRPATH</span>/<span class="variable">$DIRNAME</span></span></div><div class="line"><span class="keyword">RUN</span><span class="bash"> <span class="built_in">pwd</span></span></div><div class="line"><span class="keyword">WORKDIR</span><span class="bash"> c</span></div><div class="line"><span class="keyword">RUN</span><span class="bash"> <span class="built_in">pwd</span></span></div></pre></td></tr></table></figure>
 <p><span id="ARG">ARG</span></p>
 <p><span id="ONBUILD">ONBUILD</span></p>
 <p><span id="STOPSIGNAL">STOPSIGNAL</span></p>
