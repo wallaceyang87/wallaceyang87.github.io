@@ -86,7 +86,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="工具," />
+  <meta name="keywords" content="Hexo, NexT" />
 
 
 
@@ -102,46 +102,31 @@
 
 
 
-<meta name="description" content="标题1# 标题1
-标题2## 标题2
-标题3### 标题3
-#####1.字体正常字体
-加粗 - **加粗**
-删除 -    ~删除~
-斜体    - *斜体*
-加粗斜体  - ~~***加粗斜体***~~
-标亮 
-超级链接 - [超级链接](http://github.com)
-someone@live.com  - [someone@live.com](mailto:someone@live">
+<meta name="description" content="Docker可以通过两种方式构建镜像文件：
+
+通过docker commit命令
+通过docker build以及Dockerfile构建
+
+commit 方式构建镜像文件docker commit方式构建镜像文件不够灵活，复用性不高，不建议使用，不再赘述实现细节，原理就是生成一个基础镜像（Ubuntu或者CentOS）之后拉起镜像文件，进入容器，在容器内一层一层拉去你需要的组件，比如jdk，to">
 <meta property="og:type" content="article">
-<meta property="og:title" content="MarkDown基本语法">
-<meta property="og:url" content="http://yoursite.com/2016/11/28/MarkDown基本语法/index.html">
+<meta property="og:title" content="Docker构建镜像文件">
+<meta property="og:url" content="http://yoursite.com/2016/12/02/Docker构建镜像文件/index.html">
 <meta property="og:site_name" content="上善若水 厚德载物">
-<meta property="og:description" content="标题1# 标题1
-标题2## 标题2
-标题3### 标题3
-#####1.字体正常字体
-加粗 - **加粗**
-删除 -    ~删除~
-斜体    - *斜体*
-加粗斜体  - ~~***加粗斜体***~~
-标亮 
-超级链接 - [超级链接](http://github.com)
-someone@live.com  - [someone@live.com](mailto:someone@live">
-<meta property="og:updated_time" content="2016-11-30T08:56:25.000Z">
+<meta property="og:description" content="Docker可以通过两种方式构建镜像文件：
+
+通过docker commit命令
+通过docker build以及Dockerfile构建
+
+commit 方式构建镜像文件docker commit方式构建镜像文件不够灵活，复用性不高，不建议使用，不再赘述实现细节，原理就是生成一个基础镜像（Ubuntu或者CentOS）之后拉起镜像文件，进入容器，在容器内一层一层拉去你需要的组件，比如jdk，to">
+<meta property="og:updated_time" content="2016-12-02T03:53:29.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="MarkDown基本语法">
-<meta name="twitter:description" content="标题1# 标题1
-标题2## 标题2
-标题3### 标题3
-#####1.字体正常字体
-加粗 - **加粗**
-删除 -    ~删除~
-斜体    - *斜体*
-加粗斜体  - ~~***加粗斜体***~~
-标亮 
-超级链接 - [超级链接](http://github.com)
-someone@live.com  - [someone@live.com](mailto:someone@live">
+<meta name="twitter:title" content="Docker构建镜像文件">
+<meta name="twitter:description" content="Docker可以通过两种方式构建镜像文件：
+
+通过docker commit命令
+通过docker build以及Dockerfile构建
+
+commit 方式构建镜像文件docker commit方式构建镜像文件不够灵活，复用性不高，不建议使用，不再赘述实现细节，原理就是生成一个基础镜像（Ubuntu或者CentOS）之后拉起镜像文件，进入容器，在容器内一层一层拉去你需要的组件，比如jdk，to">
 
 
 
@@ -169,13 +154,13 @@ someone@live.com  - [someone@live.com](mailto:someone@live">
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2016/11/28/MarkDown基本语法/"/>
+  <link rel="canonical" href="http://yoursite.com/2016/12/02/Docker构建镜像文件/"/>
 
 
 
 
 
-  <title> MarkDown基本语法 | 上善若水 厚德载物 </title>
+  <title> Docker构建镜像文件 | 上善若水 厚德载物 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -296,7 +281,7 @@ someone@live.com  - [someone@live.com](mailto:someone@live">
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/11/28/MarkDown基本语法/">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/12/02/Docker构建镜像文件/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="骑二八赶驴">
@@ -320,7 +305,7 @@ someone@live.com  - [someone@live.com](mailto:someone@live">
             
             
               
-                MarkDown基本语法
+                Docker构建镜像文件
               
             
           </h1>
@@ -333,8 +318,8 @@ someone@live.com  - [someone@live.com](mailto:someone@live">
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-11-28T14:27:49+08:00">
-                2016-11-28
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-12-02T10:07:43+08:00">
+                2016-12-02
               </time>
             
 
@@ -344,31 +329,13 @@ someone@live.com  - [someone@live.com](mailto:someone@live">
           </span>
 
           
-            <span class="post-category" >
-              <span class="post-meta-divider">|</span>
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Markdown/" itemprop="url" rel="index">
-                    <span itemprop="name">Markdown</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
 
           
             
               <span class="post-comments-count">
                 <span class="post-meta-divider">|</span>
-                <a href="/2016/11/28/MarkDown基本语法/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/11/28/MarkDown基本语法/" itemprop="commentCount"></span>
+                <a href="/2016/12/02/Docker构建镜像文件/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/12/02/Docker构建镜像文件/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -394,81 +361,70 @@ someone@live.com  - [someone@live.com](mailto:someone@live">
       
 
       
-        <h1 id="标题1"><a href="#标题1" class="headerlink" title="标题1"></a>标题1</h1><p><code># 标题1</code></p>
-<h2 id="标题2"><a href="#标题2" class="headerlink" title="标题2"></a>标题2</h2><p><code>## 标题2</code></p>
-<h3 id="标题3"><a href="#标题3" class="headerlink" title="标题3"></a>标题3</h3><p><code>### 标题3</code></p>
-<p>#####1.字体<br>正常字体</p>
-<p><strong>加粗</strong> - <code>**加粗**</code></p>
-<p><del>删除</del> -    <code>~删除~</code></p>
-<p><em>斜体</em>    - <code>*斜体*</code></p>
-<p><del><strong><em>加粗斜体</em></strong></del>  - <code>~~***加粗斜体***~~</code></p>
-<p><code>标亮</code> </p>
-<p><a href="http://github.com" target="_blank" rel="external">超级链接</a> - <code>[超级链接](http://github.com)</code></p>
-<p><a href="mailto:someone@live.com" target="_blank" rel="external">someone@live.com</a>  - <code>[someone@live.com](mailto:someone@live.com)</code></p>
-<h4 id="2-代码"><a href="#2-代码" class="headerlink" title="2.代码"></a>2.代码</h4><figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span></span>&#123;</div><div class="line">true<span class="comment">//代码块</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h6 id="演示-Ruby-代码高亮"><a href="#演示-Ruby-代码高亮" class="headerlink" title="演示 Ruby 代码高亮"></a>演示 Ruby 代码高亮</h6><figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">PostController</span> &lt; ApplicationController</span></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">index</span></span></div><div class="line">    @posts = Post.last_actived.limit(<span class="number">10</span>)</div><div class="line">  <span class="keyword">end</span></div><div class="line"><span class="keyword">end</span></div></pre></td></tr></table></figure>
-<h6 id="演示-Rails-View-高亮"><a href="#演示-Rails-View-高亮" class="headerlink" title="演示 Rails View 高亮"></a>演示 Rails View 高亮</h6><figure class="highlight erb"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="xml"><span class="tag">&lt;<span class="name">%=</span></span></span><span class="ruby"> @posts.each <span class="keyword">do</span> <span class="params">|post|</span> </span><span class="xml"><span class="tag">%&gt;</span></span></div><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"post"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">%</span></span><span class="ruby"> <span class="keyword">end</span> </span><span class="xml"><span class="tag">%&gt;</span></span></div></pre></td></tr></table></figure>
-<h6 id="演示-YAML-文件"><a href="#演示-YAML-文件" class="headerlink" title="演示 YAML 文件"></a>演示 YAML 文件</h6><figure class="highlight less"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="attribute">zh-CN</span>:</div><div class="line">  	<span class="attribute">name</span>: 姓名</div><div class="line">  	<span class="attribute">age</span>: 年龄</div></pre></td></tr></table></figure>
-<blockquote>
-<p>Tip: 语言名称支持下面这些: <code>ruby</code>, <code>python</code>, <code>js</code>, <code>html</code>, <code>erb</code>, <code>css</code>, <code>coffee</code>, <code>bash</code>, <code>json</code>, <code>yml</code>, <code>xml</code> …</p>
-</blockquote>
-<h4 id="3-无序列表"><a href="#3-无序列表" class="headerlink" title="3.无序列表"></a>3.无序列表</h4><p>列表可以使用’- + *’开头，并且必须前段空行</p>
+        <p>Docker可以通过两种方式构建镜像文件：</p>
 <ul>
-<li>1<ul>
-<li>1.1</li>
-<li>1.2 </li>
+<li>通过docker commit命令</li>
+<li>通过docker build以及Dockerfile构建</li>
 </ul>
-</li>
-<li>2<ul>
-<li>2.1</li>
+<h5 id="commit-方式构建镜像文件"><a href="#commit-方式构建镜像文件" class="headerlink" title="commit 方式构建镜像文件"></a>commit 方式构建镜像文件</h5><p>docker commit方式构建镜像文件不够灵活，复用性不高，不建议使用，不再赘述实现细节，原理就是生成一个基础镜像（Ubuntu或者CentOS）之后拉起镜像文件，进入容器，在容器内一层一层拉去你需要的组件，比如jdk，tomcat，redis等等，然后通过命令</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">➜  ~ docker <span class="keyword">commit</span> 容器<span class="keyword">ID</span> 仓库名/镜像名</div></pre></td></tr></table></figure>
+<h5 id="Dockerfile-方式构建镜像文件"><a href="#Dockerfile-方式构建镜像文件" class="headerlink" title="Dockerfile 方式构建镜像文件"></a>Dockerfile 方式构建镜像文件</h5><p><strong>镜像文件示例</strong></p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">FROM</span> centos:<span class="number">7</span></div><div class="line"><span class="keyword">MAINTAINER</span> Zhang san &lt;zhangshan@lisi.com&gt;</div><div class="line"></div><div class="line"><span class="keyword">RUN</span><span class="bash"> yum install -y java-1.8.0-openjdk.x86_64</span></div><div class="line"></div><div class="line"><span class="keyword">ENV</span> JAVA_HOME /usr/lib/jvm/jre-<span class="number">1.8</span>.<span class="number">0</span>-openjdk</div><div class="line"></div><div class="line"><span class="keyword">RUN</span><span class="bash"> mkdir /apps</span></div><div class="line"></div><div class="line"><span class="keyword">COPY</span><span class="bash"> target/search-river-0.0.1-SNAPSHOT.jar /apps/search-river-0.0.1-SNAPSHOT.jar</span></div><div class="line"></div><div class="line"><span class="keyword">EXPOSE</span> <span class="number">8082</span></div><div class="line"></div><div class="line"><span class="keyword">COPY</span><span class="bash"> deploy/script/start.sh /start.sh</span></div><div class="line"></div><div class="line"><span class="keyword">CMD</span><span class="bash"> [<span class="string">"sh"</span>, <span class="string">"/start.sh"</span>]</span></div></pre></td></tr></table></figure>
+<p>Dockerfile必须以FROM指令开始，意为基础镜像，示例中基础镜像为CentOS7，文件指令执行流程如下</p>
+<ul>
+<li>Docker从基础镜像运行一个容器</li>
+<li>执行一条指令并对容器做出修改</li>
+<li>执行累死commit操作，提交一个新的镜像层</li>
+<li>基于刚提交的镜像层运行一个新容器</li>
+<li>在新容器中执行下一条指令，知道所有指令运行完成</li>
 </ul>
-</li>
-<li>3<ul>
-<li>3.1</li>
+<p><strong>生成镜像文件命令</strong><br>Dockerfile文件包含在当前目录下</p>
+<figure class="highlight armasm"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">➜  ~ docker <span class="keyword">build </span>-t 仓库名/镜像名:标签名 .</div></pre></td></tr></table></figure>
+<h5 id="Dockerfile指令"><a href="#Dockerfile指令" class="headerlink" title="Dockerfile指令"></a>Dockerfile指令</h5><p><a href="https://docs.docker.com/engine/reference/builder/#/from" target="_blank" rel="external">官方指令说明</a></p>
+<ul>
+<li><a href="#from">FORM</a> </li>
+<li><a href="#maintainer">MAINTAINER</a></li>
+<li><a href="#RUN">RUN</a></li>
+<li><a href="#CMD">CMD</a></li>
+<li><a href="#LABEL">LABEL</a></li>
+<li><a href="#EXPOSE">EXPOSE</a></li>
+<li><a href="#ENV">ENV</a></li>
+<li><a href="#ADD">ADD</a></li>
+<li><a href="#COPY">COPY</a></li>
+<li><a href="#ENTRYPOINT">ENTRYPOINT</a></li>
+<li><a href="#VOLUME">VOLUME</a></li>
+<li><a href="#USER">USER</a></li>
+<li><a href="#WORKDIR">WORKDIR</a></li>
+<li><a href="#ARG">ARG</a></li>
+<li><a href="#ONBUILD">ONBUILD</a></li>
+<li><a href="#STOPSIGNAL">STOPSIGNAL</a></li>
+<li><a href="#SHELL">SHELL</a></li>
 </ul>
-</li>
-</ul>
-<h4 id="4-有序列表"><a href="#4-有序列表" class="headerlink" title="4.有序列表"></a>4.有序列表</h4><ol>
-<li>Node.js<ol>
-<li>Express<ol>
-<li>Koa</li>
-<li>Sails</li>
-</ol>
-</li>
-</ol>
-</li>
-<li>Ruby<ol>
-<li>Rails<ol>
-<li>Sinatra</li>
-</ol>
-</li>
-</ol>
-</li>
-<li>Go</li>
-</ol>
-<h4 id="5-表格"><a href="#5-表格" class="headerlink" title="5.表格"></a>5.表格</h4><p>就是用|画表格，注意用一行– 隔开表头，:决定居中，靠左靠右</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:center">表头1</th>
-<th style="text-align:right">表头2</th>
-<th style="text-align:left">表头3</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">你好</td>
-<td style="text-align:right">北京</td>
-<td style="text-align:left">朝阳</td>
-</tr>
-<tr>
-<td style="text-align:center">a</td>
-<td style="text-align:right">b</td>
-<td style="text-align:left">c</td>
-</tr>
-</tbody>
-</table>
-<h4 id="6-提及用户"><a href="#6-提及用户" class="headerlink" title="6.提及用户"></a>6.提及用户</h4><p>@foo @bar @someone … 通过 @ 可以在发帖和回帖里面提及用户，信息提交以后，被提及的用户将会收到系统通知。以便让他来关注这个帖子或回帖。</p>
+<p><span id="from">FROM</span><br>FROM指令必须存在于Dockerfile第一个执行，指明基础镜像。</p>
+<figure class="highlight sqf"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">FROM</span> &lt;<span class="built_in">image</span>&gt;  <span class="built_in">or</span>  <span class="keyword">FROM</span> &lt;<span class="built_in">image</span>&gt;:&lt;tag&gt;  <span class="built_in">or</span> <span class="keyword">FROM</span> &lt;<span class="built_in">image</span>&gt;@&lt;digest&gt;</div></pre></td></tr></table></figure>
+<p><span id="maintainer">MAINTAINER</span><br>指明作者信息</p>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">MAINTAINER &lt;<span class="built_in">name</span>&gt;</div></pre></td></tr></table></figure>
+<p><span id="RUN">RUN</span><br>RUN指令支持两种方式</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">RUN</span><span class="bash"> mkdir /logs/myapp/</span></div></pre></td></tr></table></figure>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">RUN</span><span class="bash"> [<span class="string">"/bin/bash"</span>, <span class="string">"-c"</span>, <span class="string">"echo hello"</span>]</span></div></pre></td></tr></table></figure>
+<p><span id="CMD">CMD</span><br>CMD指令在每个Dockerfile中只能包含一次，最后一个CMD指令会覆盖前面的CMD命令，另外，在镜像拉起容器的时候，如果在启动命令最后指定了容器启动后要执行的命令，也会覆盖Dockerfile中的CMD指令。<br>例如：我在Dockerfile中指定了CMD指令，容器被拉起后会默认执行的命令</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">CMD</span><span class="bash"> [<span class="string">"sh"</span>, <span class="string">"/start.sh"</span>]</span></div></pre></td></tr></table></figure>
+<p>但是我在启动时指定了命令如下：</p>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">➜  ~ docker <span class="built_in">run</span> -<span class="keyword">it</span> -d <span class="comment">--name myapp hub.xingshulin.com/search-river:manual_v1 /bin/bash</span></div></pre></td></tr></table></figure>
+<p>容器在启动的时候不会执行我的start.sh脚本去拉起容器内的web服务，如果启动命令没有/bin/bash则会顺利拉起我的服务</p>
+<p><span id="LABEL">LABEL</span></p>
+<p><span id="EXPOSE">EXPOSE</span></p>
+<p><span id="ENV">ENV</span></p>
+<p><span id="ADD">ADD</span></p>
+<p><span id="COPY">COPY</span></p>
+<p><span id="ENTRYPOINT">ENTRYPOINT</span></p>
+<p><span id="VOLUME">VOLUME</span></p>
+<p><span id="USER">USER</span></p>
+<p><span id="WORKDIR">WORKDIR</span></p>
+<p><span id="ARG">ARG</span></p>
+<p><span id="ONBUILD">ONBUILD</span></p>
+<p><span id="STOPSIGNAL">STOPSIGNAL</span></p>
+<p><span id="SHELL">SHELL</span></p>
 
       
     </div>
@@ -506,26 +462,20 @@ someone@live.com  - [someone@live.com](mailto:someone@live">
 
     <footer class="post-footer">
       
-        <div class="post-tags">
-          
-            <a href="/tags/工具/" rel="tag"># 工具</a>
-          
-        </div>
-      
 
       
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/11/30/Docker基础/" rel="next" title="Docker基础">
+                <i class="fa fa-chevron-left"></i> Docker基础
+              </a>
             
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/11/30/Docker基础/" rel="prev" title="Docker基础">
-                Docker基础 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -551,8 +501,8 @@ someone@live.com  - [someone@live.com](mailto:someone@live">
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/11/28/MarkDown基本语法/"
-           data-title="MarkDown基本语法" data-url="http://yoursite.com/2016/11/28/MarkDown基本语法/">
+      <div class="ds-thread" data-thread-key="2016/12/02/Docker构建镜像文件/"
+           data-title="Docker构建镜像文件" data-url="http://yoursite.com/2016/12/02/Docker构建镜像文件/">
       </div>
     
   </div>
@@ -667,7 +617,7 @@ someone@live.com  - [someone@live.com](mailto:someone@live">
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#标题1"><span class="nav-number">1.</span> <span class="nav-text">标题1</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#标题2"><span class="nav-number">1.1.</span> <span class="nav-text">标题2</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#标题3"><span class="nav-number">1.1.1.</span> <span class="nav-text">标题3</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-代码"><span class="nav-number">1.1.1.1.</span> <span class="nav-text">2.代码</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#演示-Ruby-代码高亮"><span class="nav-number">1.1.1.1.0.1.</span> <span class="nav-text">演示 Ruby 代码高亮</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#演示-Rails-View-高亮"><span class="nav-number">1.1.1.1.0.2.</span> <span class="nav-text">演示 Rails View 高亮</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#演示-YAML-文件"><span class="nav-number">1.1.1.1.0.3.</span> <span class="nav-text">演示 YAML 文件</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-无序列表"><span class="nav-number">1.1.1.2.</span> <span class="nav-text">3.无序列表</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-有序列表"><span class="nav-number">1.1.1.3.</span> <span class="nav-text">4.有序列表</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-表格"><span class="nav-number">1.1.1.4.</span> <span class="nav-text">5.表格</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-提及用户"><span class="nav-number">1.1.1.5.</span> <span class="nav-text">6.提及用户</span></a></li></ol></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#commit-方式构建镜像文件"><span class="nav-number">1.</span> <span class="nav-text">commit 方式构建镜像文件</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Dockerfile-方式构建镜像文件"><span class="nav-number">2.</span> <span class="nav-text">Dockerfile 方式构建镜像文件</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Dockerfile指令"><span class="nav-number">3.</span> <span class="nav-text">Dockerfile指令</span></a></li></ol></div>
             
 
           </div>

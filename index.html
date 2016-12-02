@@ -267,6 +267,193 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/12/02/Docker构建镜像文件/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="骑二八赶驴">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar.gif">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="上善若水 厚德载物">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="上善若水 厚德载物" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/12/02/Docker构建镜像文件/" itemprop="url">
+                  Docker构建镜像文件
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-12-02T10:07:43+08:00">
+                2016-12-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <a href="/2016/12/02/Docker构建镜像文件/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/12/02/Docker构建镜像文件/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>Docker可以通过两种方式构建镜像文件：</p>
+<ul>
+<li>通过docker commit命令</li>
+<li>通过docker build以及Dockerfile构建</li>
+</ul>
+<h5 id="commit-方式构建镜像文件"><a href="#commit-方式构建镜像文件" class="headerlink" title="commit 方式构建镜像文件"></a>commit 方式构建镜像文件</h5><p>docker commit方式构建镜像文件不够灵活，复用性不高，不建议使用，不再赘述实现细节，原理就是生成一个基础镜像（Ubuntu或者CentOS）之后拉起镜像文件，进入容器，在容器内一层一层拉去你需要的组件，比如jdk，tomcat，redis等等，然后通过命令</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">➜  ~ docker <span class="keyword">commit</span> 容器<span class="keyword">ID</span> 仓库名/镜像名</div></pre></td></tr></table></figure>
+<h5 id="Dockerfile-方式构建镜像文件"><a href="#Dockerfile-方式构建镜像文件" class="headerlink" title="Dockerfile 方式构建镜像文件"></a>Dockerfile 方式构建镜像文件</h5><p><strong>镜像文件示例</strong></p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">FROM</span> centos:<span class="number">7</span></div><div class="line"><span class="keyword">MAINTAINER</span> Zhang san &lt;zhangshan@lisi.com&gt;</div><div class="line"></div><div class="line"><span class="keyword">RUN</span><span class="bash"> yum install -y java-1.8.0-openjdk.x86_64</span></div><div class="line"></div><div class="line"><span class="keyword">ENV</span> JAVA_HOME /usr/lib/jvm/jre-<span class="number">1.8</span>.<span class="number">0</span>-openjdk</div><div class="line"></div><div class="line"><span class="keyword">RUN</span><span class="bash"> mkdir /apps</span></div><div class="line"></div><div class="line"><span class="keyword">COPY</span><span class="bash"> target/search-river-0.0.1-SNAPSHOT.jar /apps/search-river-0.0.1-SNAPSHOT.jar</span></div><div class="line"></div><div class="line"><span class="keyword">EXPOSE</span> <span class="number">8082</span></div><div class="line"></div><div class="line"><span class="keyword">COPY</span><span class="bash"> deploy/script/start.sh /start.sh</span></div><div class="line"></div><div class="line"><span class="keyword">CMD</span><span class="bash"> [<span class="string">"sh"</span>, <span class="string">"/start.sh"</span>]</span></div></pre></td></tr></table></figure>
+<p>Dockerfile必须以FROM指令开始，意为基础镜像，示例中基础镜像为CentOS7，文件指令执行流程如下</p>
+<ul>
+<li>Docker从基础镜像运行一个容器</li>
+<li>执行一条指令并对容器做出修改</li>
+<li>执行累死commit操作，提交一个新的镜像层</li>
+<li>基于刚提交的镜像层运行一个新容器</li>
+<li>在新容器中执行下一条指令，知道所有指令运行完成</li>
+</ul>
+<p><strong>生成镜像文件命令</strong><br>Dockerfile文件包含在当前目录下</p>
+<figure class="highlight armasm"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">➜  ~ docker <span class="keyword">build </span>-t 仓库名/镜像名:标签名 .</div></pre></td></tr></table></figure>
+<h5 id="Dockerfile指令"><a href="#Dockerfile指令" class="headerlink" title="Dockerfile指令"></a>Dockerfile指令</h5><p><a href="https://docs.docker.com/engine/reference/builder/#/from" target="_blank" rel="external">官方指令说明</a></p>
+<ul>
+<li><a href="#from">FORM</a> </li>
+<li><a href="#maintainer">MAINTAINER</a></li>
+<li><a href="#RUN">RUN</a></li>
+<li><a href="#CMD">CMD</a></li>
+<li><a href="#LABEL">LABEL</a></li>
+<li><a href="#EXPOSE">EXPOSE</a></li>
+<li><a href="#ENV">ENV</a></li>
+<li><a href="#ADD">ADD</a></li>
+<li><a href="#COPY">COPY</a></li>
+<li><a href="#ENTRYPOINT">ENTRYPOINT</a></li>
+<li><a href="#VOLUME">VOLUME</a></li>
+<li><a href="#USER">USER</a></li>
+<li><a href="#WORKDIR">WORKDIR</a></li>
+<li><a href="#ARG">ARG</a></li>
+<li><a href="#ONBUILD">ONBUILD</a></li>
+<li><a href="#STOPSIGNAL">STOPSIGNAL</a></li>
+<li><a href="#SHELL">SHELL</a></li>
+</ul>
+<p><span id="from">FROM</span><br>FROM指令必须存在于Dockerfile第一个执行，指明基础镜像。</p>
+<figure class="highlight sqf"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">FROM</span> &lt;<span class="built_in">image</span>&gt;  <span class="built_in">or</span>  <span class="keyword">FROM</span> &lt;<span class="built_in">image</span>&gt;:&lt;tag&gt;  <span class="built_in">or</span> <span class="keyword">FROM</span> &lt;<span class="built_in">image</span>&gt;@&lt;digest&gt;</div></pre></td></tr></table></figure>
+<p><span id="maintainer">MAINTAINER</span><br>指明作者信息</p>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">MAINTAINER &lt;<span class="built_in">name</span>&gt;</div></pre></td></tr></table></figure>
+<p><span id="RUN">RUN</span><br>RUN指令支持两种方式</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">RUN</span><span class="bash"> mkdir /logs/myapp/</span></div></pre></td></tr></table></figure>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">RUN</span><span class="bash"> [<span class="string">"/bin/bash"</span>, <span class="string">"-c"</span>, <span class="string">"echo hello"</span>]</span></div></pre></td></tr></table></figure>
+<p><span id="CMD">CMD</span><br>CMD指令在每个Dockerfile中只能包含一次，最后一个CMD指令会覆盖前面的CMD命令，另外，在镜像拉起容器的时候，如果在启动命令最后指定了容器启动后要执行的命令，也会覆盖Dockerfile中的CMD指令。<br>例如：我在Dockerfile中指定了CMD指令，容器被拉起后会默认执行的命令</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">CMD</span><span class="bash"> [<span class="string">"sh"</span>, <span class="string">"/start.sh"</span>]</span></div></pre></td></tr></table></figure>
+<p>但是我在启动时指定了命令如下：</p>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">➜  ~ docker <span class="built_in">run</span> -<span class="keyword">it</span> -d <span class="comment">--name myapp hub.xingshulin.com/search-river:manual_v1 /bin/bash</span></div></pre></td></tr></table></figure>
+<p>容器在启动的时候不会执行我的start.sh脚本去拉起容器内的web服务，如果启动命令没有/bin/bash则会顺利拉起我的服务</p>
+<p><span id="LABEL">LABEL</span></p>
+<p><span id="EXPOSE">EXPOSE</span></p>
+<p><span id="ENV">ENV</span></p>
+<p><span id="ADD">ADD</span></p>
+<p><span id="COPY">COPY</span></p>
+<p><span id="ENTRYPOINT">ENTRYPOINT</span></p>
+<p><span id="VOLUME">VOLUME</span></p>
+<p><span id="USER">USER</span></p>
+<p><span id="WORKDIR">WORKDIR</span></p>
+<p><span id="ARG">ARG</span></p>
+<p><span id="ONBUILD">ONBUILD</span></p>
+<p><span id="STOPSIGNAL">STOPSIGNAL</span></p>
+<p><span id="SHELL">SHELL</span></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
   <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/11/30/Docker基础/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -685,158 +872,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/11/28/Java运行时汇编代码输出/">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="骑二八赶驴">
-    <meta itemprop="description" content="">
-    <meta itemprop="image" content="/images/avatar.gif">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="上善若水 厚德载物">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="上善若水 厚德载物" src="">
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/11/28/Java运行时汇编代码输出/" itemprop="url">
-                  Java运行时汇编代码输出
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-11-28T14:15:53+08:00">
-                2016-11-28
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-              <span class="post-meta-divider">|</span>
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/并发编程/" itemprop="url" rel="index">
-                    <span itemprop="name">并发编程</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <a href="/2016/11/28/Java运行时汇编代码输出/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/11/28/Java运行时汇编代码输出/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>看一些书中的示例代码，讲一些原理性的东西时，总是将Java代码转换为汇编代码来讲原理，出于好奇，也想将自己的代码转换过来看看，可惜事情总不是想想的那么简单，比如我想看一下Java中如何将volatile关键字转换后的lock头究竟是个什么样子的，折腾了半天，终于见到它的庐山真面目。<br>首先，我们需要HSDIS插件，jvm不提供将字节码输出成汇编代码的功能，所以我们要借助HSDIS插件来（Kenai（<a href="http://kenai.com/projects/base-hsdis）提供并得到Sun官方推荐的HotSpot" target="_blank" rel="external">http://kenai.com/projects/base-hsdis）提供并得到Sun官方推荐的HotSpot</a> VM JIT编译代码的反汇编插件）。下载该插件并拷贝到本机的/Library/Java/JavaVirtualMachines/jdk1.8.0_91.jdk/Contents/Home/jre/lib目录中。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">InterThreadLatency</span></span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> REPETITIONS = <span class="number">10</span> * <span class="number">10</span> * <span class="number">10</span>;</div><div class="line"></div><div class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">volatile</span> <span class="keyword">int</span> ping = -<span class="number">1</span>;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">volatile</span> <span class="keyword">int</span> pong = -<span class="number">1</span>;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(<span class="keyword">final</span> String[] args)</span></span></div><div class="line">            <span class="keyword">throws</span> Exception</div><div class="line">    &#123;</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">5</span>; i++)</div><div class="line">        &#123;</div><div class="line">            <span class="keyword">final</span> <span class="keyword">long</span> duration = runTest();</div><div class="line"></div><div class="line">            System.out.printf(<span class="string">"%d - %dns avg latency - ping=%d pong=%d\n"</span>,</div><div class="line">                    i,</div><div class="line">                    duration / (REPETITIONS * <span class="number">2</span>),</div><div class="line">                    ping,</div><div class="line">                    pong);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">long</span> <span class="title">runTest</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException</span></div><div class="line">    &#123;</div><div class="line">        <span class="keyword">final</span> Thread pongThread = <span class="keyword">new</span> Thread(<span class="keyword">new</span> PongRunner());</div><div class="line">        <span class="keyword">final</span> Thread pingThread = <span class="keyword">new</span> Thread(<span class="keyword">new</span> PingRunner());</div><div class="line">        pongThread.start();</div><div class="line">        pingThread.start();</div><div class="line"></div><div class="line">        <span class="keyword">final</span> <span class="keyword">long</span> start = System.nanoTime();</div><div class="line">        pongThread.join();</div><div class="line"></div><div class="line">        <span class="keyword">return</span> System.nanoTime() - start;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">PingRunner</span> <span class="keyword">implements</span> <span class="title">Runnable</span></span></div><div class="line">    &#123;</div><div class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span></div><div class="line">        &#123;</div><div class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; REPETITIONS; i++)</div><div class="line">            &#123;</div><div class="line">                ping = i;</div><div class="line"></div><div class="line">                <span class="keyword">while</span> (i != pong)</div><div class="line">                &#123;</div><div class="line">                    <span class="comment">// busy spin</span></div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">PongRunner</span> <span class="keyword">implements</span> <span class="title">Runnable</span></span></div><div class="line">    &#123;</div><div class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span></div><div class="line">        &#123;</div><div class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; REPETITIONS; i++)</div><div class="line">            &#123;</div><div class="line">                <span class="keyword">while</span> (i != ping)</div><div class="line">                &#123;</div><div class="line"></div><div class="line">                &#125;</div><div class="line"></div><div class="line">                pong = i;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>编译测试类：</p>
-<p> <code>java javac InterThreadLatency.java</code></p>
-<p>执行转汇编命令：</p>
-<p><code>java -XX:+UnlockDiagnosticVMOptions -XX:+PrintAssembly InterThreadLatency</code></p>
-<p><code>java -XX:+UnlockDiagnosticVMOptions &#39;-XX:CompileCommand=print,*PongRunner.run&#39; InterThreadLatency</code></p>
-<p><code>0x00000001032b9299: lock addl $0x0,(%rsp)     ;*putstatic ping
-                                                ; - InterThreadLatency::access$002@2 (line 2)
-                                                ; - InterThreadLatency$PingRunner::run@10 (line 43)</code>                                               </p>
-<p>可以看到，pong属性在进行写操作时，增加了Lock指令。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -886,7 +921,7 @@
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-count">2</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -895,7 +930,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-count">3</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
