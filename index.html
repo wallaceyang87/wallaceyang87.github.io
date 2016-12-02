@@ -538,11 +538,41 @@
 <p>但是我在启动时指定了命令如下：</p>
 <figure class="highlight applescript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">➜  ~ docker <span class="built_in">run</span> -<span class="keyword">it</span> -d <span class="comment">--name myapp hub.xingshulin.com/search-river:manual_v1 /bin/bash</span></div></pre></td></tr></table></figure>
 <p>容器在启动的时候不会执行我的start.sh脚本去拉起容器内的web服务，如果启动命令没有/bin/bash则会顺利拉起我的服务</p>
-<p><span id="LABEL">LABEL</span></p>
-<p><span id="EXPOSE">EXPOSE</span></p>
-<p><span id="ENV">ENV</span></p>
-<p><span id="ADD">ADD</span></p>
-<p><span id="COPY">COPY</span></p>
+<p><span id="LABEL">LABEL</span><br>LABEL命令用来给镜像中添加元数据，元数据以键值对的方式展现和设置。</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">LABEL</span><span class="bash"> version=<span class="string">"1.0"</span></span></div></pre></td></tr></table></figure>
+<p>在一个dockerfile中可以设置多个LABEL键值对，存在多个LABEL时，建议将他们合并为一条命令</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">LABEL</span><span class="bash"> multi.label1=<span class="string">"value1"</span> multi.label2=<span class="string">"value2"</span> other=<span class="string">"value3"</span></span></div></pre></td></tr></table></figure>
+<p>或者</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">LABEL</span><span class="bash"> multi.label1=<span class="string">"value1"</span> \</span></div><div class="line">      multi.label2=<span class="string">"value2"</span> \</div><div class="line">      other=<span class="string">"value3"</span></div></pre></td></tr></table></figure>
+<p>这样做的目的是因为每一条指令都会生成一层镜像文件，合并之后防止生成过多的层文件。</p>
+<p><span id="EXPOSE">EXPOSE</span><br>EXPOSE指令指出通知Docker这个容器在运行时对外开放的端口号，但如果想通过宿主机访问这个端口，需要在容器启动时加入-p或者-P选项，这时才可以将容器开放的端口暴露给宿主机，并且宿主机会分配一个端口与容器打通通信。</p>
+<p>Dockerfile</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">EXPOSE</span> <span class="number">8082</span></div></pre></td></tr></table></figure>
+<p>容器启动时需指定端口：</p>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">➜  ~ docker <span class="built_in">run</span> -<span class="keyword">it</span> -d -p <span class="number">8082</span>:<span class="number">8082</span> <span class="comment">--name xslsearch search-river:v1</span></div></pre></td></tr></table></figure>
+<p>随机绑定宿主机端口</p>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">➜  ~ docker <span class="built_in">run</span> -<span class="keyword">it</span> -d -p <span class="number">8082</span> <span class="comment">--name xslsearch search-river:v1</span></div></pre></td></tr></table></figure>
+<p>特定网络指定端口:</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">➜  ~ <span class="selector-tag">docker</span> <span class="selector-tag">run</span> <span class="selector-tag">-it</span> <span class="selector-tag">-d</span> <span class="selector-tag">-p</span> 127<span class="selector-class">.0</span><span class="selector-class">.0</span><span class="selector-class">.1</span><span class="selector-pseudo">:8082</span><span class="selector-pseudo">:8082</span> <span class="selector-tag">--name</span> <span class="selector-tag">xslsearch</span> <span class="selector-tag">search-river</span><span class="selector-pseudo">:v1</span></div></pre></td></tr></table></figure>
+<p>特定网络随机宿主机端口:</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">➜  ~ <span class="selector-tag">docker</span> <span class="selector-tag">run</span> <span class="selector-tag">-it</span> <span class="selector-tag">-d</span> <span class="selector-tag">-p</span> 127<span class="selector-class">.0</span><span class="selector-class">.0</span><span class="selector-class">.1</span><span class="selector-pseudo">::8082</span> <span class="selector-tag">--name</span> <span class="selector-tag">xslsearch</span> <span class="selector-tag">search-river</span><span class="selector-pseudo">:v1</span></div></pre></td></tr></table></figure>
+<p><span id="ENV">ENV</span><br>ENV指令用于指定容器环境变量</p>
+<figure class="highlight livescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">ENV myName=<span class="string">"John Doe"</span> myDog=Rex<span class="string">\</span> The<span class="string">\</span> Dog <span class="string">\</span></div><div class="line">    myCat=fluffy</div></pre></td></tr></table></figure>
+<p>或者</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">ENV</span> myName John Doe</div><div class="line"><span class="keyword">ENV</span> myDog Rex The Dog</div><div class="line"><span class="keyword">ENV</span> myCat fluffy</div></pre></td></tr></table></figure>
+<p>一旦容器运行，这些环境变量就持久化在了容器内部，可以通过docker inspect查看env，也可以通过–env修改环境变量</p>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">➜  ~ docker -<span class="built_in">run</span> <span class="comment">--env JAVA_HOME=/bin/***</span></div></pre></td></tr></table></figure>
+<p><span id="ADD">ADD</span><br>ADD指令与COPY很相似，不过ADD命令在拷贝文件时，如果文件是压缩格式，拷贝至目标文件时会自动解压，并且ADD支持从URL下载文件拷贝至容器。</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">ADD</span><span class="bash"> &lt;src&gt;... &lt;dest&gt;</span></div><div class="line"><span class="keyword">ADD</span><span class="bash"> [<span class="string">"&lt;src&gt;"</span>,... <span class="string">"&lt;dest&gt;"</span>]</span></div></pre></td></tr></table></figure>
+<p>以上两种方式使用ADD指令</p>
+<blockquote>
+<p>使用时需要注意的是src路径必须是当前build上下文目录的相对路径，不可以跳出上下文，如../somepath/somefile/,dest必须是容器内的绝对路径或者容器当前WORKDIR的相对路径(Dockerfile中之前WORKDIR指定的目录)<br>支持通配符的目录地址</p>
+</blockquote>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">ADD</span><span class="bash"> hom* /mydir/        <span class="comment"># 所有以"hom"开头的文件</span></span></div><div class="line"><span class="keyword">ADD</span><span class="bash"> hom?.txt /mydir/    <span class="comment"># ？将替换一个字符，如 "home.txt"</span></span></div></pre></td></tr></table></figure>
+<blockquote>
+<p>如果<code>&lt;dest&gt;</code>以/结尾，则认为源位置指向的是一个目录，如果不以/结尾，则认为源位置是一个普通文件</p>
+</blockquote>
+<p><span id="COPY">COPY</span><br>与ADD相似，不能解压，不支持URL</p>
 <p><span id="ENTRYPOINT">ENTRYPOINT</span></p>
 <p><span id="VOLUME">VOLUME</span></p>
 <p><span id="USER">USER</span></p>
