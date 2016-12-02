@@ -102,31 +102,19 @@
 
 
 
-<meta name="description" content="Docker可以通过两种方式构建镜像文件：
-
-通过docker commit命令
-通过docker build以及Dockerfile构建
-
-commit 方式构建镜像文件docker commit方式构建镜像文件不够灵活，复用性不高，不建议使用，不再赘述实现细节，原理就是生成一个基础镜像（Ubuntu或者CentOS）之后拉起镜像文件，进入容器，在容器内一层一层拉去你需要的组件，比如jdk，to">
+<meta name="description" content="本文主要记录Docker使用中遇到的各种问题以及解决办法，可能本文无法给出问题根因的分析，但是解决方案肯定是亲测过可行的。
+1、Create more free space in thin pool or use dm.min_free_space option to change behavior问题背景：宿主机磁盘使用率100%后，宿主机进行扩容，认为docker使用可以正常，在进行镜像下载时">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Docker构建镜像文件">
-<meta property="og:url" content="http://yoursite.com/2016/12/02/Docker构建镜像文件/index.html">
+<meta property="og:title" content="Docker踩坑集锦">
+<meta property="og:url" content="http://yoursite.com/2016/12/02/Docker踩坑集锦/index.html">
 <meta property="og:site_name" content="上善若水 厚德载物">
-<meta property="og:description" content="Docker可以通过两种方式构建镜像文件：
-
-通过docker commit命令
-通过docker build以及Dockerfile构建
-
-commit 方式构建镜像文件docker commit方式构建镜像文件不够灵活，复用性不高，不建议使用，不再赘述实现细节，原理就是生成一个基础镜像（Ubuntu或者CentOS）之后拉起镜像文件，进入容器，在容器内一层一层拉去你需要的组件，比如jdk，to">
-<meta property="og:updated_time" content="2016-12-02T03:53:29.000Z">
+<meta property="og:description" content="本文主要记录Docker使用中遇到的各种问题以及解决办法，可能本文无法给出问题根因的分析，但是解决方案肯定是亲测过可行的。
+1、Create more free space in thin pool or use dm.min_free_space option to change behavior问题背景：宿主机磁盘使用率100%后，宿主机进行扩容，认为docker使用可以正常，在进行镜像下载时">
+<meta property="og:updated_time" content="2016-12-02T08:43:07.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Docker构建镜像文件">
-<meta name="twitter:description" content="Docker可以通过两种方式构建镜像文件：
-
-通过docker commit命令
-通过docker build以及Dockerfile构建
-
-commit 方式构建镜像文件docker commit方式构建镜像文件不够灵活，复用性不高，不建议使用，不再赘述实现细节，原理就是生成一个基础镜像（Ubuntu或者CentOS）之后拉起镜像文件，进入容器，在容器内一层一层拉去你需要的组件，比如jdk，to">
+<meta name="twitter:title" content="Docker踩坑集锦">
+<meta name="twitter:description" content="本文主要记录Docker使用中遇到的各种问题以及解决办法，可能本文无法给出问题根因的分析，但是解决方案肯定是亲测过可行的。
+1、Create more free space in thin pool or use dm.min_free_space option to change behavior问题背景：宿主机磁盘使用率100%后，宿主机进行扩容，认为docker使用可以正常，在进行镜像下载时">
 
 
 
@@ -154,13 +142,13 @@ commit 方式构建镜像文件docker commit方式构建镜像文件不够灵活
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2016/12/02/Docker构建镜像文件/"/>
+  <link rel="canonical" href="http://yoursite.com/2016/12/02/Docker踩坑集锦/"/>
 
 
 
 
 
-  <title> Docker构建镜像文件 | 上善若水 厚德载物 </title>
+  <title> Docker踩坑集锦 | 上善若水 厚德载物 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -281,7 +269,7 @@ commit 方式构建镜像文件docker commit方式构建镜像文件不够灵活
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/12/02/Docker构建镜像文件/">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/12/02/Docker踩坑集锦/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="骑二八赶驴">
@@ -305,7 +293,7 @@ commit 方式构建镜像文件docker commit方式构建镜像文件不够灵活
             
             
               
-                Docker构建镜像文件
+                Docker踩坑集锦
               
             
           </h1>
@@ -318,7 +306,7 @@ commit 方式构建镜像文件docker commit方式构建镜像文件不够灵活
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-12-02T10:07:43+08:00">
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-12-02T16:29:36+08:00">
                 2016-12-02
               </time>
             
@@ -334,8 +322,8 @@ commit 方式构建镜像文件docker commit方式构建镜像文件不够灵活
             
               <span class="post-comments-count">
                 <span class="post-meta-divider">|</span>
-                <a href="/2016/12/02/Docker构建镜像文件/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/12/02/Docker构建镜像文件/" itemprop="commentCount"></span>
+                <a href="/2016/12/02/Docker踩坑集锦/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/12/02/Docker踩坑集锦/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -361,70 +349,18 @@ commit 方式构建镜像文件docker commit方式构建镜像文件不够灵活
       
 
       
-        <p>Docker可以通过两种方式构建镜像文件：</p>
-<ul>
-<li>通过docker commit命令</li>
-<li>通过docker build以及Dockerfile构建</li>
-</ul>
-<h5 id="commit-方式构建镜像文件"><a href="#commit-方式构建镜像文件" class="headerlink" title="commit 方式构建镜像文件"></a>commit 方式构建镜像文件</h5><p>docker commit方式构建镜像文件不够灵活，复用性不高，不建议使用，不再赘述实现细节，原理就是生成一个基础镜像（Ubuntu或者CentOS）之后拉起镜像文件，进入容器，在容器内一层一层拉去你需要的组件，比如jdk，tomcat，redis等等，然后通过命令</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">➜  ~ docker <span class="keyword">commit</span> 容器<span class="keyword">ID</span> 仓库名/镜像名</div></pre></td></tr></table></figure>
-<h5 id="Dockerfile-方式构建镜像文件"><a href="#Dockerfile-方式构建镜像文件" class="headerlink" title="Dockerfile 方式构建镜像文件"></a>Dockerfile 方式构建镜像文件</h5><p><strong>镜像文件示例</strong></p>
-<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">FROM</span> centos:<span class="number">7</span></div><div class="line"><span class="keyword">MAINTAINER</span> Zhang san &lt;zhangshan@lisi.com&gt;</div><div class="line"></div><div class="line"><span class="keyword">RUN</span><span class="bash"> yum install -y java-1.8.0-openjdk.x86_64</span></div><div class="line"></div><div class="line"><span class="keyword">ENV</span> JAVA_HOME /usr/lib/jvm/jre-<span class="number">1.8</span>.<span class="number">0</span>-openjdk</div><div class="line"></div><div class="line"><span class="keyword">RUN</span><span class="bash"> mkdir /apps</span></div><div class="line"></div><div class="line"><span class="keyword">COPY</span><span class="bash"> target/search-river-0.0.1-SNAPSHOT.jar /apps/search-river-0.0.1-SNAPSHOT.jar</span></div><div class="line"></div><div class="line"><span class="keyword">EXPOSE</span> <span class="number">8082</span></div><div class="line"></div><div class="line"><span class="keyword">COPY</span><span class="bash"> deploy/script/start.sh /start.sh</span></div><div class="line"></div><div class="line"><span class="keyword">CMD</span><span class="bash"> [<span class="string">"sh"</span>, <span class="string">"/start.sh"</span>]</span></div></pre></td></tr></table></figure>
-<p>Dockerfile必须以FROM指令开始，意为基础镜像，示例中基础镜像为CentOS7，文件指令执行流程如下</p>
-<ul>
-<li>Docker从基础镜像运行一个容器</li>
-<li>执行一条指令并对容器做出修改</li>
-<li>执行累死commit操作，提交一个新的镜像层</li>
-<li>基于刚提交的镜像层运行一个新容器</li>
-<li>在新容器中执行下一条指令，知道所有指令运行完成</li>
-</ul>
-<p><strong>生成镜像文件命令</strong><br>Dockerfile文件包含在当前目录下</p>
-<figure class="highlight armasm"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">➜  ~ docker <span class="keyword">build </span>-t 仓库名/镜像名:标签名 .</div></pre></td></tr></table></figure>
-<h5 id="Dockerfile指令"><a href="#Dockerfile指令" class="headerlink" title="Dockerfile指令"></a>Dockerfile指令</h5><p><a href="https://docs.docker.com/engine/reference/builder/#/from" target="_blank" rel="external">官方指令说明</a></p>
-<ul>
-<li><a href="#from">FORM</a> </li>
-<li><a href="#maintainer">MAINTAINER</a></li>
-<li><a href="#RUN">RUN</a></li>
-<li><a href="#CMD">CMD</a></li>
-<li><a href="#LABEL">LABEL</a></li>
-<li><a href="#EXPOSE">EXPOSE</a></li>
-<li><a href="#ENV">ENV</a></li>
-<li><a href="#ADD">ADD</a></li>
-<li><a href="#COPY">COPY</a></li>
-<li><a href="#ENTRYPOINT">ENTRYPOINT</a></li>
-<li><a href="#VOLUME">VOLUME</a></li>
-<li><a href="#USER">USER</a></li>
-<li><a href="#WORKDIR">WORKDIR</a></li>
-<li><a href="#ARG">ARG</a></li>
-<li><a href="#ONBUILD">ONBUILD</a></li>
-<li><a href="#STOPSIGNAL">STOPSIGNAL</a></li>
-<li><a href="#SHELL">SHELL</a></li>
-</ul>
-<p><span id="from">FROM</span><br>FROM指令必须存在于Dockerfile第一个执行，指明基础镜像。</p>
-<figure class="highlight sqf"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">FROM</span> &lt;<span class="built_in">image</span>&gt;  <span class="built_in">or</span>  <span class="keyword">FROM</span> &lt;<span class="built_in">image</span>&gt;:&lt;tag&gt;  <span class="built_in">or</span> <span class="keyword">FROM</span> &lt;<span class="built_in">image</span>&gt;@&lt;digest&gt;</div></pre></td></tr></table></figure>
-<p><span id="maintainer">MAINTAINER</span><br>指明作者信息</p>
-<figure class="highlight applescript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">MAINTAINER &lt;<span class="built_in">name</span>&gt;</div></pre></td></tr></table></figure>
-<p><span id="RUN">RUN</span><br>RUN指令支持两种方式</p>
-<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">RUN</span><span class="bash"> mkdir /logs/myapp/</span></div></pre></td></tr></table></figure>
-<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">RUN</span><span class="bash"> [<span class="string">"/bin/bash"</span>, <span class="string">"-c"</span>, <span class="string">"echo hello"</span>]</span></div></pre></td></tr></table></figure>
-<p><span id="CMD">CMD</span><br>CMD指令在每个Dockerfile中只能包含一次，最后一个CMD指令会覆盖前面的CMD命令，另外，在镜像拉起容器的时候，如果在启动命令最后指定了容器启动后要执行的命令，也会覆盖Dockerfile中的CMD指令。<br>例如：我在Dockerfile中指定了CMD指令，容器被拉起后会默认执行的命令</p>
-<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">CMD</span><span class="bash"> [<span class="string">"sh"</span>, <span class="string">"/start.sh"</span>]</span></div></pre></td></tr></table></figure>
-<p>但是我在启动时指定了命令如下：</p>
-<figure class="highlight applescript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">➜  ~ docker <span class="built_in">run</span> -<span class="keyword">it</span> -d <span class="comment">--name myapp hub.xingshulin.com/search-river:manual_v1 /bin/bash</span></div></pre></td></tr></table></figure>
-<p>容器在启动的时候不会执行我的start.sh脚本去拉起容器内的web服务，如果启动命令没有/bin/bash则会顺利拉起我的服务</p>
-<p><span id="LABEL">LABEL</span></p>
-<p><span id="EXPOSE">EXPOSE</span></p>
-<p><span id="ENV">ENV</span></p>
-<p><span id="ADD">ADD</span></p>
-<p><span id="COPY">COPY</span></p>
-<p><span id="ENTRYPOINT">ENTRYPOINT</span></p>
-<p><span id="VOLUME">VOLUME</span></p>
-<p><span id="USER">USER</span></p>
-<p><span id="WORKDIR">WORKDIR</span></p>
-<p><span id="ARG">ARG</span></p>
-<p><span id="ONBUILD">ONBUILD</span></p>
-<p><span id="STOPSIGNAL">STOPSIGNAL</span></p>
-<p><span id="SHELL">SHELL</span></p>
+        <p>本文主要记录Docker使用中遇到的各种问题以及解决办法，可能本文无法给出问题根因的分析，但是解决方案肯定是亲测过可行的。</p>
+<h5 id="1、Create-more-free-space-in-thin-pool-or-use-dm-min-free-space-option-to-change-behavior"><a href="#1、Create-more-free-space-in-thin-pool-or-use-dm-min-free-space-option-to-change-behavior" class="headerlink" title="1、Create more free space in thin pool or use dm.min_free_space option to change behavior"></a>1、Create more free space in thin pool or use dm.min_free_space option to change behavior</h5><p>问题背景：宿主机磁盘使用率100%后，宿主机进行扩容，认为docker使用可以正常，在进行镜像下载时，报错如下。</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]# docker pull hub.xingshulin.<span class="keyword">com</span>/xslsearch-river:jenkins-<span class="built_in">search</span>-river-master-<span class="number">6</span></div><div class="line">jenkins-<span class="built_in">search</span>-river-master-<span class="number">6</span>: Pulling from xslsearch-river</div><div class="line"><span class="number">3</span>d8673bd162<span class="variable">a:</span> Already <span class="built_in">exists</span></div><div class="line"><span class="number">6</span>a678b9ee1fe: Extracting [==================================================&gt;] <span class="number">92.44</span> MB/<span class="number">92.44</span> MB</div><div class="line"><span class="number">7</span>e608f7462e<span class="variable">a:</span> Download <span class="built_in">complete</span></div><div class="line"><span class="number">39</span>acdd7b697f: Download <span class="built_in">complete</span></div><div class="line">ce1b6bafaebe: Download <span class="built_in">complete</span></div><div class="line">failed <span class="keyword">to</span> register layer: devmapper: Thin Pool <span class="built_in">has</span> <span class="number">10265</span> free data blocks which <span class="keyword">is</span> less than minimum required <span class="number">163840</span> free data blocks. Create more free space in thin pool <span class="built_in">or</span> use dm.min_free_space option <span class="keyword">to</span> <span class="keyword">change</span> behavior</div></pre></td></tr></table></figure>
+<p>与运维同学沟通，是Docker内部机制导致该问题出现，如果宿主机的硬盘使用率达到100%后，docker会认为pool里面的空间也耗尽，宿主机磁盘扩容后，也需要将docker的设备进行扩容，扩容前：</p>
+<figure class="highlight armasm"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">[root<span class="comment">@localhost ~]# docker info</span></div><div class="line"><span class="symbol">Containers</span>: <span class="number">15</span></div><div class="line"><span class="symbol"> Running:</span> <span class="number">1</span></div><div class="line"><span class="symbol"> Paused:</span> <span class="number">0</span></div><div class="line"><span class="symbol"> Stopped:</span> <span class="number">14</span></div><div class="line"><span class="symbol">Images</span>: <span class="number">28</span></div><div class="line"><span class="symbol">Server</span> Version: <span class="number">1</span>.<span class="number">11</span>.<span class="number">2</span></div><div class="line"><span class="symbol">Storage</span> Driver: devicemapper</div><div class="line"> Pool Name: docker-<span class="number">253</span>:<span class="number">0</span>-<span class="number">33631381</span>-pool</div><div class="line"> Pool <span class="keyword">Blocksize: </span><span class="number">65</span>.<span class="number">54</span> kB</div><div class="line"> <span class="keyword">Base </span>Device Size: <span class="number">10</span>.<span class="number">74</span> GB</div><div class="line"> <span class="keyword">Backing </span>Filesystem: xfs</div><div class="line"> <span class="meta">Data</span> file: /dev/loop0</div><div class="line"> Metadata file: /dev/loop1</div><div class="line"> <span class="meta">Data</span> <span class="meta">Space</span> Used: <span class="number">106</span>.<span class="number">7</span> GB</div><div class="line"> <span class="meta">Data</span> <span class="meta">Space</span> Total: <span class="number">107</span>.<span class="number">4</span> GB</div></pre></td></tr></table></figure>
+<p>扩容方案采自官方文档：<a href="https://docs.docker.com/engine/userguide/storagedriver/device-mapper-driver/#/increase-capacity-on-a-running-device" target="_blank" rel="external">扩容方案</a>，按步骤执行即可，原理我也不懂啊😂😂😂</p>
+<p>扩容后设备空间：</p>
+<figure class="highlight armasm"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">[root<span class="comment">@localhost ~]# docker info</span></div><div class="line"><span class="symbol">Containers</span>: <span class="number">15</span></div><div class="line"><span class="symbol"> Running:</span> <span class="number">1</span></div><div class="line"><span class="symbol"> Paused:</span> <span class="number">0</span></div><div class="line"><span class="symbol"> Stopped:</span> <span class="number">14</span></div><div class="line"><span class="symbol">Images</span>: <span class="number">28</span></div><div class="line"><span class="symbol">Server</span> Version: <span class="number">1</span>.<span class="number">11</span>.<span class="number">2</span></div><div class="line"><span class="symbol">Storage</span> Driver: devicemapper</div><div class="line"> Pool Name: docker-<span class="number">253</span>:<span class="number">0</span>-<span class="number">33631381</span>-pool</div><div class="line"> Pool <span class="keyword">Blocksize: </span><span class="number">65</span>.<span class="number">54</span> kB</div><div class="line"> <span class="keyword">Base </span>Device Size: <span class="number">10</span>.<span class="number">74</span> GB</div><div class="line"> <span class="keyword">Backing </span>Filesystem: xfs</div><div class="line"> <span class="meta">Data</span> file: /dev/loop0</div><div class="line"> Metadata file: /dev/loop1</div><div class="line"> <span class="meta">Data</span> <span class="meta">Space</span> Used: <span class="number">106</span>.<span class="number">7</span> GB</div><div class="line"> <span class="meta">Data</span> <span class="meta">Space</span> Total: <span class="number">214</span>.<span class="number">7</span> GB</div></pre></td></tr></table></figure>
+<p>此时再进行镜像的pull等操作顺利进行</p>
+<blockquote>
+<p>建议：在给Docker分配空间时，尽量不要超过宿主机的磁盘空间，一旦宿主机磁盘使用率100%需要扩容，会导致docker出现此问题</p>
+</blockquote>
 
       
     </div>
@@ -467,8 +403,8 @@ commit 方式构建镜像文件docker commit方式构建镜像文件不够灵活
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/11/30/Docker基础/" rel="next" title="Docker基础">
-                <i class="fa fa-chevron-left"></i> Docker基础
+              <a href="/2016/12/02/Docker构建镜像文件/" rel="next" title="Docker构建镜像文件">
+                <i class="fa fa-chevron-left"></i> Docker构建镜像文件
               </a>
             
           </div>
@@ -476,10 +412,6 @@ commit 方式构建镜像文件docker commit方式构建镜像文件不够灵活
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/12/02/Docker踩坑集锦/" rel="prev" title="Docker踩坑集锦">
-                Docker踩坑集锦 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -505,8 +437,8 @@ commit 方式构建镜像文件docker commit方式构建镜像文件不够灵活
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/12/02/Docker构建镜像文件/"
-           data-title="Docker构建镜像文件" data-url="http://yoursite.com/2016/12/02/Docker构建镜像文件/">
+      <div class="ds-thread" data-thread-key="2016/12/02/Docker踩坑集锦/"
+           data-title="Docker踩坑集锦" data-url="http://yoursite.com/2016/12/02/Docker踩坑集锦/">
       </div>
     
   </div>
@@ -621,7 +553,7 @@ commit 方式构建镜像文件docker commit方式构建镜像文件不够灵活
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#commit-方式构建镜像文件"><span class="nav-number">1.</span> <span class="nav-text">commit 方式构建镜像文件</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Dockerfile-方式构建镜像文件"><span class="nav-number">2.</span> <span class="nav-text">Dockerfile 方式构建镜像文件</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Dockerfile指令"><span class="nav-number">3.</span> <span class="nav-text">Dockerfile指令</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#1、Create-more-free-space-in-thin-pool-or-use-dm-min-free-space-option-to-change-behavior"><span class="nav-number">1.</span> <span class="nav-text">1、Create more free space in thin pool or use dm.min_free_space option to change behavior</span></a></li></ol></div>
             
 
           </div>

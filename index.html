@@ -267,6 +267,141 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/12/02/Docker踩坑集锦/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="骑二八赶驴">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar.gif">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="上善若水 厚德载物">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="上善若水 厚德载物" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/12/02/Docker踩坑集锦/" itemprop="url">
+                  Docker踩坑集锦
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-12-02T16:29:36+08:00">
+                2016-12-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <a href="/2016/12/02/Docker踩坑集锦/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/12/02/Docker踩坑集锦/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>本文主要记录Docker使用中遇到的各种问题以及解决办法，可能本文无法给出问题根因的分析，但是解决方案肯定是亲测过可行的。</p>
+<h5 id="1、Create-more-free-space-in-thin-pool-or-use-dm-min-free-space-option-to-change-behavior"><a href="#1、Create-more-free-space-in-thin-pool-or-use-dm-min-free-space-option-to-change-behavior" class="headerlink" title="1、Create more free space in thin pool or use dm.min_free_space option to change behavior"></a>1、Create more free space in thin pool or use dm.min_free_space option to change behavior</h5><p>问题背景：宿主机磁盘使用率100%后，宿主机进行扩容，认为docker使用可以正常，在进行镜像下载时，报错如下。</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]# docker pull hub.xingshulin.<span class="keyword">com</span>/xslsearch-river:jenkins-<span class="built_in">search</span>-river-master-<span class="number">6</span></div><div class="line">jenkins-<span class="built_in">search</span>-river-master-<span class="number">6</span>: Pulling from xslsearch-river</div><div class="line"><span class="number">3</span>d8673bd162<span class="variable">a:</span> Already <span class="built_in">exists</span></div><div class="line"><span class="number">6</span>a678b9ee1fe: Extracting [==================================================&gt;] <span class="number">92.44</span> MB/<span class="number">92.44</span> MB</div><div class="line"><span class="number">7</span>e608f7462e<span class="variable">a:</span> Download <span class="built_in">complete</span></div><div class="line"><span class="number">39</span>acdd7b697f: Download <span class="built_in">complete</span></div><div class="line">ce1b6bafaebe: Download <span class="built_in">complete</span></div><div class="line">failed <span class="keyword">to</span> register layer: devmapper: Thin Pool <span class="built_in">has</span> <span class="number">10265</span> free data blocks which <span class="keyword">is</span> less than minimum required <span class="number">163840</span> free data blocks. Create more free space in thin pool <span class="built_in">or</span> use dm.min_free_space option <span class="keyword">to</span> <span class="keyword">change</span> behavior</div></pre></td></tr></table></figure>
+<p>与运维同学沟通，是Docker内部机制导致该问题出现，如果宿主机的硬盘使用率达到100%后，docker会认为pool里面的空间也耗尽，宿主机磁盘扩容后，也需要将docker的设备进行扩容，扩容前：</p>
+<figure class="highlight armasm"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">[root<span class="comment">@localhost ~]# docker info</span></div><div class="line"><span class="symbol">Containers</span>: <span class="number">15</span></div><div class="line"><span class="symbol"> Running:</span> <span class="number">1</span></div><div class="line"><span class="symbol"> Paused:</span> <span class="number">0</span></div><div class="line"><span class="symbol"> Stopped:</span> <span class="number">14</span></div><div class="line"><span class="symbol">Images</span>: <span class="number">28</span></div><div class="line"><span class="symbol">Server</span> Version: <span class="number">1</span>.<span class="number">11</span>.<span class="number">2</span></div><div class="line"><span class="symbol">Storage</span> Driver: devicemapper</div><div class="line"> Pool Name: docker-<span class="number">253</span>:<span class="number">0</span>-<span class="number">33631381</span>-pool</div><div class="line"> Pool <span class="keyword">Blocksize: </span><span class="number">65</span>.<span class="number">54</span> kB</div><div class="line"> <span class="keyword">Base </span>Device Size: <span class="number">10</span>.<span class="number">74</span> GB</div><div class="line"> <span class="keyword">Backing </span>Filesystem: xfs</div><div class="line"> <span class="meta">Data</span> file: /dev/loop0</div><div class="line"> Metadata file: /dev/loop1</div><div class="line"> <span class="meta">Data</span> <span class="meta">Space</span> Used: <span class="number">106</span>.<span class="number">7</span> GB</div><div class="line"> <span class="meta">Data</span> <span class="meta">Space</span> Total: <span class="number">107</span>.<span class="number">4</span> GB</div></pre></td></tr></table></figure>
+<p>扩容方案采自官方文档：<a href="https://docs.docker.com/engine/userguide/storagedriver/device-mapper-driver/#/increase-capacity-on-a-running-device" target="_blank" rel="external">扩容方案</a>，按步骤执行即可，原理我也不懂啊😂😂😂</p>
+<p>扩容后设备空间：</p>
+<figure class="highlight armasm"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">[root<span class="comment">@localhost ~]# docker info</span></div><div class="line"><span class="symbol">Containers</span>: <span class="number">15</span></div><div class="line"><span class="symbol"> Running:</span> <span class="number">1</span></div><div class="line"><span class="symbol"> Paused:</span> <span class="number">0</span></div><div class="line"><span class="symbol"> Stopped:</span> <span class="number">14</span></div><div class="line"><span class="symbol">Images</span>: <span class="number">28</span></div><div class="line"><span class="symbol">Server</span> Version: <span class="number">1</span>.<span class="number">11</span>.<span class="number">2</span></div><div class="line"><span class="symbol">Storage</span> Driver: devicemapper</div><div class="line"> Pool Name: docker-<span class="number">253</span>:<span class="number">0</span>-<span class="number">33631381</span>-pool</div><div class="line"> Pool <span class="keyword">Blocksize: </span><span class="number">65</span>.<span class="number">54</span> kB</div><div class="line"> <span class="keyword">Base </span>Device Size: <span class="number">10</span>.<span class="number">74</span> GB</div><div class="line"> <span class="keyword">Backing </span>Filesystem: xfs</div><div class="line"> <span class="meta">Data</span> file: /dev/loop0</div><div class="line"> Metadata file: /dev/loop1</div><div class="line"> <span class="meta">Data</span> <span class="meta">Space</span> Used: <span class="number">106</span>.<span class="number">7</span> GB</div><div class="line"> <span class="meta">Data</span> <span class="meta">Space</span> Total: <span class="number">214</span>.<span class="number">7</span> GB</div></pre></td></tr></table></figure>
+<p>此时再进行镜像的pull等操作顺利进行</p>
+<blockquote>
+<p>建议：在给Docker分配空间时，尽量不要超过宿主机的磁盘空间，一旦宿主机磁盘使用率100%需要扩容，会导致docker出现此问题</p>
+</blockquote>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
   <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/12/02/Docker构建镜像文件/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -913,7 +1048,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">3</span>
+              <span class="site-state-item-count">4</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
