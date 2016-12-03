@@ -525,6 +525,7 @@
 <li><a href="#ONBUILD">ONBUILD</a></li>
 <li><a href="#STOPSIGNAL">STOPSIGNAL</a></li>
 <li><a href="#SHELL">SHELL</a></li>
+<li><a href="#HEALTHCHECK">HEALTHCHECK</a></li>
 </ul>
 <p><span id="from">FROM</span><br>FROM指令必须存在于Dockerfile第一个执行，指明基础镜像。</p>
 <figure class="highlight sqf"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">FROM</span> &lt;<span class="built_in">image</span>&gt;  <span class="built_in">or</span>  <span class="keyword">FROM</span> &lt;<span class="built_in">image</span>&gt;:&lt;tag&gt;  <span class="built_in">or</span> <span class="keyword">FROM</span> &lt;<span class="built_in">image</span>&gt;@&lt;digest&gt;</div></pre></td></tr></table></figure>
@@ -584,11 +585,28 @@
 <figure class="highlight crmsh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">USER</span> <span class="title">user</span></div><div class="line"><span class="keyword">USER</span> <span class="title">user</span>:<span class="keyword">group</span></div><div class="line"><span class="title">USER</span> uid:gid</div><div class="line"><span class="keyword">USER</span> <span class="title">user</span>:gid</div><div class="line"><span class="keyword">USER</span> <span class="title">uid</span>:group</div></pre></td></tr></table></figure>
 <p><span id="WORKDIR">WORKDIR</span><br>WORKDIR用于指定当前工作目录，便于后面的COPY,ADD,RUN等指令的执行</p>
 <figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">ENV</span> DIRPATH /path</div><div class="line"><span class="keyword">WORKDIR</span><span class="bash"> <span class="variable">$DIRPATH</span>/<span class="variable">$DIRNAME</span></span></div><div class="line"><span class="keyword">RUN</span><span class="bash"> <span class="built_in">pwd</span></span></div><div class="line"><span class="keyword">WORKDIR</span><span class="bash"> c</span></div><div class="line"><span class="keyword">RUN</span><span class="bash"> <span class="built_in">pwd</span></span></div></pre></td></tr></table></figure>
-<p><span id="ARG">ARG</span></p>
-<p><span id="ONBUILD">ONBUILD</span></p>
-<p><span id="STOPSIGNAL">STOPSIGNAL</span></p>
-<p><span id="SHELL">SHELL</span></p>
-
+<p><span id="ARG">ARG</span><br>ARG指令用于docker build命令运行时传递给构建运行的变量，只需要在构建时使用–build-arg标志即可。</p>
+<blockquote>
+<p>只能传递在Dockerfile中定义的参数</p>
+</blockquote>
+<figure class="highlight armasm"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="symbol">ARG</span> <span class="keyword">build</span></div><div class="line"><span class="symbol">ARG</span> webapp_user<span class="symbol">=user</span></div></pre></td></tr></table></figure>
+<figure class="highlight armasm"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">➜  ~ docker <span class="keyword">build </span>-t --<span class="keyword">build-arg </span><span class="keyword">build=1234 </span>*** .</div></pre></td></tr></table></figure>
+<p>构建镜像是build变量值将设置为1234，而webapp_user保持默认值user<br><span id="ONBUILD">ONBUILD</span><br>ONBUILD指令可以为镜像添加触发器。当一个镜像被引入另外一个镜像的Dockerfile中作为基础镜像时，会触发该指令的执行。<br>例如基础镜像中</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">FROM</span> centos:<span class="number">7</span></div><div class="line"></div><div class="line"><span class="keyword">MAINTAINER</span> Yang Lei &lt;yanglei@xingshulin.com&gt;</div><div class="line"></div><div class="line"><span class="keyword">ONBUILD</span> <span class="keyword">ADD</span><span class="bash"> . /var/www/</span></div><div class="line"></div><div class="line"><span class="keyword">CMD</span><span class="bash"> [<span class="string">"sh"</span>, <span class="string">"/start.sh"</span>]</span></div></pre></td></tr></table></figure>
+<figure class="highlight armasm"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">➜  ~ docker <span class="keyword">build </span>-t demo-onbuild:<span class="built_in">v1</span> .</div></pre></td></tr></table></figure>
+<p>在另外一个镜像构建文件Dockerfile中</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">FROM</span> demo-<span class="keyword">onbuild</span>:v1</div><div class="line"></div><div class="line"><span class="keyword">MAINTAINER</span> Yang Lei &lt;yanglei@xingshulin.com&gt;</div><div class="line"></div><div class="line"><span class="keyword">CMD</span><span class="bash"> [<span class="string">"sh"</span>,<span class="string">"/bin/bash"</span>]</span></div></pre></td></tr></table></figure>
+<figure class="highlight armasm"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">➜  ~ docker <span class="keyword">build </span>-t demo-onbuild-trigger:<span class="built_in">v1</span> .</div></pre></td></tr></table></figure>
+<p>会看到执行过程中onbuild的执行。</p>
+<p><span id="STOPSIGNAL">STOPSIGNAL</span><br>STOPSIGNAL指令在容器退出时发送什么系统信号给容器，这个信号必须是内核系统调用表中的合法的数，如9，或者SIGNAME格式中的信号名称，如SIGKILL.</p>
+<figure class="highlight qml"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">STOPSIGNAL <span class="keyword">signal</span><span class="string"></span></div></pre></td></tr></table></figure>
+<p><span id="SHELL">SHELL</span><br>貌似是专门为windows提供的指令，未关注，也没有过使用场景，详情还是看官方文档吧<a href="https://docs.docker.com/engine/reference/builder/#shell" target="_blank" rel="external">官方SHELL指令</a></p>
+<p><span id="HEALTHCHECK">HEALTHCHECK</span><br>HEALTHCHECK指令用于容器内部健康检查</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">HEALTHCHECK</span><span class="bash"> [OPTIONS] CMD <span class="built_in">command</span> &#123;检查容器健康状态&#125;</span></div><div class="line"></div><div class="line"><span class="keyword">HEALTHCHECK</span><span class="bash"> NONE &#123;禁用任何继承于父类镜像的健康检查&#125;</span></div></pre></td></tr></table></figure>
+<p>OPTIONS用法如下：</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="attr">--interval</span>=DURATION (default: <span class="number">30</span>s)</div><div class="line"></div><div class="line"><span class="attr">--timeout</span>=DURATION (default: <span class="number">30</span>s)</div><div class="line"></div><div class="line"><span class="attr">--retries</span>=N (default: <span class="number">3</span>)</div></pre></td></tr></table></figure>
+<p>使用示例</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">HEALTHCHECK</span><span class="bash"> --interval=5m --timeout=3s \</span></div><div class="line">  CMD curl <span class="_">-f</span> http://localhost/ || <span class="built_in">exit</span> 1</div></pre></td></tr></table></figure>
           
         
       
