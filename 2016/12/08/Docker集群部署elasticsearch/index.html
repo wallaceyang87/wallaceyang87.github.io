@@ -1,0 +1,766 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Monda:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Lobster Two:300,300italic,400,400italic,700,700italic|consolas:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="Docker部署集群elasticsearch，折腾了两天，终于完成了部署，本文搭建的方式是最简单的实现，没有使用swarm，consul等集群管理，服务注册工具
+1、服务器准备三台宿主机：
+
+192.168.10.178
+192.168.10.179
+192.168.10.181
+
+宿主机安装docker，不赘述，CentOS安装docker文档很多，也很简单。
+2、官方镜像准备每台宿主机获取e">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Docker集群部署elasticsearch">
+<meta property="og:url" content="http://yoursite.com/2016/12/08/Docker集群部署elasticsearch/index.html">
+<meta property="og:site_name" content="上善若水 厚德载物">
+<meta property="og:description" content="Docker部署集群elasticsearch，折腾了两天，终于完成了部署，本文搭建的方式是最简单的实现，没有使用swarm，consul等集群管理，服务注册工具
+1、服务器准备三台宿主机：
+
+192.168.10.178
+192.168.10.179
+192.168.10.181
+
+宿主机安装docker，不赘述，CentOS安装docker文档很多，也很简单。
+2、官方镜像准备每台宿主机获取e">
+<meta property="og:updated_time" content="2016-12-09T04:13:47.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Docker集群部署elasticsearch">
+<meta name="twitter:description" content="Docker部署集群elasticsearch，折腾了两天，终于完成了部署，本文搭建的方式是最简单的实现，没有使用swarm，consul等集群管理，服务注册工具
+1、服务器准备三台宿主机：
+
+192.168.10.178
+192.168.10.179
+192.168.10.181
+
+宿主机安装docker，不赘述，CentOS安装docker文档很多，也很简单。
+2、官方镜像准备每台宿主机获取e">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/12/08/Docker集群部署elasticsearch/"/>
+
+
+
+
+
+  <title> Docker集群部署elasticsearch | 上善若水 厚德载物 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">上善若水 厚德载物</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/12/08/Docker集群部署elasticsearch/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="骑二八赶驴">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar.gif">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="上善若水 厚德载物">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="上善若水 厚德载物" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Docker集群部署elasticsearch
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-12-08T16:56:29+08:00">
+                2016-12-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <a href="/2016/12/08/Docker集群部署elasticsearch/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/12/08/Docker集群部署elasticsearch/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><strong>Docker部署集群elasticsearch，折腾了两天，终于完成了部署，本文搭建的方式是最简单的实现，没有使用swarm，consul等集群管理，服务注册工具</strong></p>
+<h5 id="1、服务器准备"><a href="#1、服务器准备" class="headerlink" title="1、服务器准备"></a>1、服务器准备</h5><p>三台宿主机：</p>
+<ul>
+<li>192.168.10.178</li>
+<li>192.168.10.179</li>
+<li>192.168.10.181</li>
+</ul>
+<p>宿主机安装docker，不赘述，CentOS安装docker文档很多，也很简单。</p>
+<h5 id="2、官方镜像准备"><a href="#2、官方镜像准备" class="headerlink" title="2、官方镜像准备"></a>2、官方镜像准备</h5><p>每台宿主机获取elasticsearch镜像文件</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">➜  ~ <span class="selector-tag">docker</span> <span class="selector-tag">pull</span> <span class="selector-tag">elasticsearch</span><span class="selector-pseudo">:2.3.3</span></div></pre></td></tr></table></figure>
+<h5 id="3、各宿主机节点容器运行"><a href="#3、各宿主机节点容器运行" class="headerlink" title="3、各宿主机节点容器运行"></a>3、各宿主机节点容器运行</h5><p>三台宿主机分别执行如下命令：</p>
+<ul>
+<li>178</li>
+</ul>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">docker run -d -<span class="selector-tag">p</span> <span class="number">9200</span>:<span class="number">9200</span> -<span class="selector-tag">p</span> <span class="number">9300</span>:<span class="number">9300</span> elasticsearch:<span class="number">2.3</span>.<span class="number">3</span> \</div><div class="line">-Des<span class="selector-class">.node</span><span class="selector-class">.name</span>=<span class="string">"es1"</span> \</div><div class="line">-Des<span class="selector-class">.cluster</span><span class="selector-class">.name</span>=<span class="string">"mycluster"</span> \</div><div class="line">-Des<span class="selector-class">.network</span><span class="selector-class">.host</span>=_eth0_ \</div><div class="line">-Des<span class="selector-class">.network</span><span class="selector-class">.publish_host</span>=<span class="number">192.168</span>.<span class="number">10.178</span> \</div><div class="line">-Des<span class="selector-class">.discovery</span><span class="selector-class">.zen</span><span class="selector-class">.ping</span><span class="selector-class">.unicast</span><span class="selector-class">.hosts</span>=<span class="number">192.168</span>.<span class="number">10.178</span>,<span class="number">192.168</span>.<span class="number">10.179</span>,<span class="number">192.168</span>.<span class="number">10.181</span> \</div><div class="line">-Des<span class="selector-class">.discovery</span><span class="selector-class">.zen</span><span class="selector-class">.minimum_master_nodes</span>=<span class="number">1</span></div></pre></td></tr></table></figure>
+<ul>
+<li>179</li>
+</ul>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">docker run -d -<span class="selector-tag">p</span> <span class="number">9200</span>:<span class="number">9200</span> -<span class="selector-tag">p</span> <span class="number">9300</span>:<span class="number">9300</span> elasticsearch:<span class="number">2.3</span>.<span class="number">3</span> \</div><div class="line">-Des<span class="selector-class">.node</span><span class="selector-class">.name</span>=<span class="string">"es2"</span> \</div><div class="line">-Des<span class="selector-class">.cluster</span><span class="selector-class">.name</span>=<span class="string">"mycluster"</span> \</div><div class="line">-Des<span class="selector-class">.network</span><span class="selector-class">.host</span>=_eth0_ \</div><div class="line">-Des<span class="selector-class">.network</span><span class="selector-class">.publish_host</span>=<span class="number">192.168</span>.<span class="number">10.179</span> \</div><div class="line">-Des<span class="selector-class">.discovery</span><span class="selector-class">.zen</span><span class="selector-class">.ping</span><span class="selector-class">.unicast</span><span class="selector-class">.hosts</span>=<span class="number">192.168</span>.<span class="number">10.178</span>,<span class="number">192.168</span>.<span class="number">10.179</span>,<span class="number">192.168</span>.<span class="number">10.181</span> \</div><div class="line">-Des<span class="selector-class">.discovery</span><span class="selector-class">.zen</span><span class="selector-class">.minimum_master_nodes</span>=<span class="number">1</span></div></pre></td></tr></table></figure>
+<ul>
+<li>181</li>
+</ul>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">docker run -d -<span class="selector-tag">p</span> <span class="number">9200</span>:<span class="number">9200</span> -<span class="selector-tag">p</span> <span class="number">9300</span>:<span class="number">9300</span> elasticsearch:<span class="number">2.3</span>.<span class="number">3</span> \</div><div class="line">-Des<span class="selector-class">.node</span><span class="selector-class">.name</span>=<span class="string">"es3"</span> \</div><div class="line">-Des<span class="selector-class">.cluster</span><span class="selector-class">.name</span>=<span class="string">"mycluster"</span> \</div><div class="line">-Des<span class="selector-class">.network</span><span class="selector-class">.host</span>=_eth0_ \</div><div class="line">-Des<span class="selector-class">.network</span><span class="selector-class">.publish_host</span>=<span class="number">192.168</span>.<span class="number">10.181</span> \</div><div class="line">-Des<span class="selector-class">.discovery</span><span class="selector-class">.zen</span><span class="selector-class">.ping</span><span class="selector-class">.unicast</span><span class="selector-class">.hosts</span>=<span class="number">192.168</span>.<span class="number">10.178</span>,<span class="number">192.168</span>.<span class="number">10.179</span>,<span class="number">192.168</span>.<span class="number">10.181</span> \</div><div class="line">-Des<span class="selector-class">.discovery</span><span class="selector-class">.zen</span><span class="selector-class">.minimum_master_nodes</span>=<span class="number">1</span></div></pre></td></tr></table></figure>
+<p>elasticsearch容器启动参数说明，通过-Des指定：</p>
+<ul>
+<li>node.name 指定es节点名称，否则会随机生成节点名称。</li>
+<li>cluster.name 指定es集群名称，不指定为默认的elasticsearch</li>
+<li>network.host 节点绑定至容器主机名或者ip，并将此es节点发布到集群其他节点，允许ip地址，主机名，特殊值或任意组合的数组，本例中将其绑定到eth0网卡，默认是lo（local），会让集群检测失败。</li>
+<li>network.publish_host 发布主机节点是唯一的接口使节点通告集群中其他节点，使这些节点可以连接到本节点，目前elasticsearch节点可以绑定多个地址，但是只允许一个地址被发布出去。如果未指定发布主机，默认选择最好的地址从network.host参数中，选取规则是由IPv4／IPv6协议栈的偏好排序，然后通过可达性排序。在本例中，我们使用的是宿主机的局域网ip，Docker容器将内部eth0网卡ip自动转换成宿主机ip，所以我们之前配置的es选项监听docker内部网络，将允许集群其他节点到达我们的节点。</li>
+<li>discovery.zen.ping.unicast.hosts 本例中我们通过使用zen discovery去单播发现集群节点，此配置项是配置本节点在集群中会去发现那些集群中的其他节点</li>
+<li>discovery.zen.minimum_master_nodes master 节点最小个数，本文设置为1</li>
+</ul>
+<h5 id="4、集群健康检查"><a href="#4、集群健康检查" class="headerlink" title="4、集群健康检查"></a>4、集群健康检查</h5><p>我们可以通过es的api进行简单的集群检查</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">http:<span class="regexp">//</span><span class="number">192.168</span>.<span class="number">10.181</span>:<span class="number">9200</span><span class="regexp">/_cluster/</span>health</div></pre></td></tr></table></figure>
+<p>可以看到node数量为3</p>
+<p>或者安装集群管理插件，如HQ</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">➜  ~ docker <span class="built_in">exec</span> containerId plugin install royrusso/elasticsearch-HQ</div></pre></td></tr></table></figure>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">http:<span class="regexp">//</span><span class="number">192.168</span>.<span class="number">10.181</span>:<span class="number">9200</span><span class="regexp">/_plugin/</span>hq</div></pre></td></tr></table></figure>
+<p>对某一节点进行关闭重启等操作，可以在hq控制台看到集群信息相应变化</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+      
+        <div id="alipay" style="display: inline-block">
+          <img id="alipay_qr" src="/path/to/alipay-reward-image" alt="骑二八赶驴 Alipay"/>
+          <p>支付宝打赏</p>
+        </div>
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/12/05/homebrew卸载应用/" rel="next" title="homebrew卸载应用">
+                <i class="fa fa-chevron-left"></i> homebrew卸载应用
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/12/08/Docker集群部署elasticsearch/"
+           data-title="Docker集群部署elasticsearch" data-url="http://yoursite.com/2016/12/08/Docker集群部署elasticsearch/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="骑二八赶驴" />
+          <p class="site-author-name" itemprop="name">骑二八赶驴</p>
+          <p class="site-description motion-element" itemprop="description">回首向来萧瑟处，也无风雨也无晴</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">7</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-block">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              Links
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://example.com/" title="Title" target="_blank">Title</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://macshuo.com/" title="MacTalk" target="_blank">MacTalk</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#1、服务器准备"><span class="nav-number">1.</span> <span class="nav-text">1、服务器准备</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2、官方镜像准备"><span class="nav-number">2.</span> <span class="nav-text">2、官方镜像准备</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3、各宿主机节点容器运行"><span class="nav-number">3.</span> <span class="nav-text">3、各宿主机节点容器运行</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#4、集群健康检查"><span class="nav-number">4.</span> <span class="nav-text">4、集群健康检查</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">骑二八赶驴</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"wallaceyang"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>
